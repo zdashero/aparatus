@@ -25,7 +25,7 @@ $(document).ready(function() {
                     setTimeout(typeWriter, speed);
                 } else {
                     isDeleting = false;
-                    document.getElementById("typing").innerHTML = `<a href="https://aparatus.vercel.app/4/index.html">${enterText}</a>`;
+                    document.getElementById("typing").innerHTML = `<a href="https://aparatus.vercel.app">${enterText}</a>`;
                 }
             }
         }

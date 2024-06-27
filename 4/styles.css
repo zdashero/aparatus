@@ -17,7 +17,7 @@ body {
     font-size: 5em;
     position: relative;
     color: lime;
-    animation: glitch 0.5s infinite;
+    animation: glitch 5s infinite;
 }
 
 .glitch::before, .glitch::after {
@@ -31,14 +31,14 @@ body {
 }
 
 .glitch::before {
-    animation: glitch-before 5s infinite linear;
+    animation: glitch-before 1s infinite linear;
     top: 0;
     left: 0;
     text-shadow: -2px 0 red;
 }
 
 .glitch::after {
-    animation: glitch-after 0.1s infinite linear;
+    animation: glitch-after 5s infinite linear;
     top: 0;
     left: 0;
     text-shadow: -2px 0 blue;
