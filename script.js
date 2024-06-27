@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $.getJSON('https://api.ipify.org?format=json', function(data) {
         const ip = data.ip;
-        const text = `Welcome ${ip} to apparatus...`;
+        const text = `Welcome ${ip}`;
         const enterText = "[enter]";
         let i = 0;
         const speed = 100;
