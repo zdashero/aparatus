@@ -1,13 +1,12 @@
 $(document).ready(function() {
     $.getJSON('https://api.ipify.org?format=json', function(data) {
         const ip = data.ip;
-        const text = `Welcome ${ip}`;
-        const enterText = "[enter]";
+        const text = `Enjoy ${ip} Don't Forget To Star My Repos`;
         let i = 0;
         const speed = 100;
         let isDeleting = false;
         let isTyping = true;
-        
+
         function typeWriter() {
             if (isTyping) {
                 if (i < text.length) {
@@ -25,7 +24,6 @@ $(document).ready(function() {
                     setTimeout(typeWriter, speed);
                 } else {
                     isDeleting = false;
-                    document.getElementById("typing").innerHTML = `<a href="https://aparatus.vercel.app/page/">${enterText}</a>`;
                 }
             }
         }
